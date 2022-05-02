@@ -79,6 +79,14 @@ async function run() {
             const result = await productsCollection.deleteOne(query)
             res.send(result)
         })
+
+        //add a product 
+        app.post('/products/add', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
+            console.log(product)
+            res.send({ message: "successful", result: result })
+        })
     }
 
 
