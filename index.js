@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const port = process.env.PORT || 5000
 
@@ -86,6 +87,16 @@ async function run() {
             const result = await productsCollection.insertOne(product);
             console.log(product)
             res.send({ message: "successful", result: result })
+        })
+
+        //generating token
+        app.post('/login', async (req, res) => {
+            const user = req.body;
+            console.log(user)
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN, {
+                expiresIn: "1d"
+            })
+            res.send({ token: token })
         })
     }
 
