@@ -16,6 +16,9 @@ app.get('/', (req, res) => {
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const res = require('express/lib/response')
+
+
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vwa1d.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -98,6 +101,38 @@ async function run() {
             })
             res.send({ token: token })
         })
+
+        //accessing only current email users products
+        app.get('/myproducts', async (req, res) => {
+            const email = req.query.email;
+            const token = req.query.token;
+            const verifiedEmail = verifyToken(token)
+            console.log(verifiedEmail)
+            if (verifiedEmail === email) {
+                const query = { email: email };
+                const cursor = productsCollection.find(query)
+                const result = await cursor.toArray()
+                res.send({ message: "success", result })
+            }
+            else {
+                res.status(401).send({ message: "no access" })
+            }
+        })
+
+        // verify token 
+        function verifyToken(token) {
+            let email = "";
+            jwt.verify(token, process.env.ACCESS_TOKEN, function (err, decoded) {
+                if (err) {
+                    return;
+                }
+                if (decoded) {
+                    email = decoded.email;
+                }
+            })
+            return email;
+        }
+
     }
 
 
