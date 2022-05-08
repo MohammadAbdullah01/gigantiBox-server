@@ -26,7 +26,7 @@ async function run() {
     try {
         await client.connect();
         const productsCollection = client.db("giganticBox").collection("products");
-
+        const reviewCollection = client.db("happyClients").collection("reviews");
         //get all products
         app.get("/products", async (req, res) => {
             const query = {};
@@ -117,6 +117,14 @@ async function run() {
             else {
                 res.status(401).send({ message: "no access" })
             }
+        })
+
+        //get clients reviews collection
+        app.get("/reviews", async (req, res) => {
+            const query = {};
+            const cursor = reviewCollection.find(query);
+            const result = await cursor.toArray()
+            res.send(result)
         })
 
         // verify token 
