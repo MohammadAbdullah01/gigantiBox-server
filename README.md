@@ -1,5 +1,5 @@
 # giganticBox
-giganticBox is a warehouse which stores refrigerators from suppliers and delivers to customers.
+giganticBox is a warehouse which stores refrigerators of various brands.
 
 Live Site [https://giganticbox-42710.web.app/](https://giganticbox-42710.web.app/)
 
